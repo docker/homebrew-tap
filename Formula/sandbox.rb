@@ -12,8 +12,19 @@ class Sandbox < Formula
   end
 
   def install
+    system "#{HOMEBREW_PREFIX}/bin/sandbox", "daemon", "stop" if File.exist?("#{HOMEBREW_PREFIX}/bin/sandbox")
     binary_name = "docker-sandbox-darwin-arm64"
     bin.install binary_name => "sandbox"
+  end
+
+  def caveats
+    <<~EOS
+      Start the daemon after installing:
+        sandbox daemon start -d
+
+      Restart the daemon after upgrading:
+        sandbox daemon stop && sandbox daemon start -d
+    EOS
   end
 
   test do
