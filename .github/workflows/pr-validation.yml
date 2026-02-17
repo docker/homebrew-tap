@@ -1,0 +1,91 @@
+name: PR Validation
+
+on:
+  pull_request:
+    paths:
+      - "Formula/**"
+      - ".github/workflows/pr-validation.yml"
+
+permissions: {}
+
+jobs:
+  detect-changes:
+    name: Detect Changed Formulas
+    runs-on: ubuntu-latest
+    outputs:
+      formulas: ${{ steps.changed.outputs.formulas }}
+      has_changes: ${{ steps.changed.outputs.has_changes }}
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          fetch-depth: 0
+
+      - name: Get changed formulas
+        id: changed
+        run: |
+          FORMULAS=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- 'Formula/*.rb' | xargs -I{} basename {} .rb)
+          if [ -z "$FORMULAS" ]; then
+            echo "No formula changes detected"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "formulas=[]" >> $GITHUB_OUTPUT
+          else
+            JSON_ARRAY=$(echo "$FORMULAS" | jq -R -s -c 'split("\n") | map(select(length > 0))')
+            echo "Changed formulas: $JSON_ARRAY"
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "formulas=$JSON_ARRAY" >> $GITHUB_OUTPUT
+          fi
+
+  validate-formula:
+    name: Validate Formula (${{ matrix.formula }})
+    runs-on: macos-latest
+    needs: detect-changes
+    if: needs.detect-changes.outputs.has_changes == 'true'
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        formula: ${{ fromJson(needs.detect-changes.outputs.formulas) }}
+    env:
+      TAP_PATH: ${{ github.repository_owner }}/homebrew-tap
+      FORMULA_PATH: ${{ github.repository_owner }}/homebrew-tap/${{ matrix.formula }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - name: Tap this repository
+        run: |
+          ABS_TAP_PATH="$(brew --repository)/Library/Taps/${TAP_PATH}"
+          mkdir -p "$ABS_TAP_PATH"
+          cp -r . "$ABS_TAP_PATH"
+
+      - name: Run brew style
+        run: |
+          brew style --formula "$FORMULA_PATH"
+
+      - name: Run brew audit
+        env:
+          FORMULA_PATH: ${{ github.repository_owner }}/homebrew-tap/${{ matrix.formula }}
+        run: |
+          if ! brew audit --formula "$FORMULA_PATH" --new 2>/dev/null; then
+            echo "New formula audit failed, trying regular audit..."
+            brew audit --formula "$FORMULA_PATH"
+          fi
+
+      - name: Install formula
+        run: |
+          brew install --verbose "$FORMULA_PATH"
+
+      - name: Test formula
+        run: |
+          brew test "$FORMULA_PATH"
+
+      - name: Cleanup
+        if: always()
+        run: |
+          brew uninstall "$FORMULA_PATH" 2>/dev/null || true
+          TAP_PATH="$(brew --repository)/Library/Taps/${{ github.repository_owner }}/homebrew-tap"
+          rm -rf "$TAP_PATH" || true
