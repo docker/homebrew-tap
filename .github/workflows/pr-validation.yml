@@ -67,8 +67,6 @@ jobs:
           brew style --formula "$FORMULA_PATH"
 
       - name: Run brew audit
-        env:
-          FORMULA_PATH: ${{ github.repository_owner }}/homebrew-tap/${{ matrix.formula }}
         run: |
           if ! brew audit --formula "$FORMULA_PATH" --new 2>/dev/null; then
             echo "New formula audit failed, trying regular audit..."
@@ -87,5 +85,5 @@ jobs:
         if: always()
         run: |
           brew uninstall "$FORMULA_PATH" 2>/dev/null || true
-          TAP_PATH="$(brew --repository)/Library/Taps/${{ github.repository_owner }}/homebrew-tap"
-          rm -rf "$TAP_PATH" || true
+          ABS_TAP_PATH="$(brew --repository)/Library/Taps/${TAP_PATH}"
+          rm -rf "$ABS_TAP_PATH" || true
