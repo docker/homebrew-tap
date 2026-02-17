@@ -19,9 +19,6 @@ class Sandbox < Formula
 
   def caveats
     <<~EOS
-      Start the daemon after installing:
-        sandbox daemon start -d
-
       Restart the daemon after upgrading:
         sandbox daemon stop && sandbox daemon start -d
     EOS
