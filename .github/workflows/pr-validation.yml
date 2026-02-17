@@ -1,0 +1,148 @@
+name: PR Validation
+
+on:
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'Formula/**'
+
+jobs:
+  syntax-check:
+    name: Formula Syntax Check
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed formulas
+        id: changed
+        run: |
+          FORMULAS=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- 'Formula/*.rb' | tr '\n' ' ')
+          echo "formulas=$FORMULAS" >> $GITHUB_OUTPUT
+          if [ -z "$FORMULAS" ]; then
+            echo "No formula changes detected"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "Changed formulas: $FORMULAS"
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Validate formula changes
+        if: steps.changed.outputs.has_changes != 'true'
+        run: |
+          echo "::warning::No formula changes detected in this PR"
+          exit 0
+
+      - name: Tap this repository
+        if: steps.changed.outputs.has_changes == 'true'
+        run: |
+          TAP_PATH="$(brew --repository)/Library/Taps/${{ github.repository_owner }}/homebrew-tap"
+          mkdir -p "$TAP_PATH"
+          cp -r . "$TAP_PATH"
+
+      - name: Run brew style
+        if: steps.changed.outputs.has_changes == 'true'
+        run: |
+          STYLE_FAILED=0
+          for formula in ${{ steps.changed.outputs.formulas }}; do
+            echo "Checking style for $formula"
+            if ! brew style --formula "$formula"; then
+              STYLE_FAILED=1
+            fi
+          done
+          if [ "$STYLE_FAILED" -eq 1 ]; then
+            echo "::error::Style check failed for one or more formulas"
+            exit 1
+          fi
+
+      - name: Run brew audit
+        if: steps.changed.outputs.has_changes == 'true'
+        run: |
+          AUDIT_FAILED=0
+          for formula in ${{ steps.changed.outputs.formulas }}; do
+            formula_name=$(basename "$formula" .rb)
+            echo "Auditing $formula_name"
+            if ! brew audit --formula "${{ github.repository_owner }}/homebrew-tap/$formula_name" --new 2>/dev/null; then
+              echo "New formula audit failed, trying regular audit..."
+              if ! brew audit --formula "${{ github.repository_owner }}/homebrew-tap/$formula_name"; then
+                echo "::error::Audit failed for $formula_name"
+                AUDIT_FAILED=1
+              fi
+            fi
+          done
+          if [ "$AUDIT_FAILED" -eq 1 ]; then
+            exit 1
+          fi
+
+      - name: Cleanup tap
+        if: always()
+        run: |
+          TAP_PATH="$(brew --repository)/Library/Taps/${{ github.repository_owner }}/homebrew-tap"
+          rm -rf "$TAP_PATH" || true
+
+  install-test:
+    name: Formula Install Test
+    runs-on: macos-latest
+    needs: syntax-check
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed formulas
+        id: changed
+        run: |
+          FORMULAS=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- 'Formula/*.rb' | xargs -I{} basename {} .rb | tr '\n' ' ')
+          echo "formulas=$FORMULAS" >> $GITHUB_OUTPUT
+          if [ -z "$FORMULAS" ]; then
+            echo "No formula changes detected"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "Changed formulas: $FORMULAS"
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Validate formula changes
+        if: steps.changed.outputs.has_changes != 'true'
+        run: |
+          echo "::warning::No formula changes detected in this PR"
+          exit 0
+
+      - name: Tap this repository
+        if: steps.changed.outputs.has_changes == 'true'
+        run: |
+          TAP_PATH="$(brew --repository)/Library/Taps/${{ github.repository_owner }}/homebrew-tap"
+          mkdir -p "$TAP_PATH"
+          cp -r . "$TAP_PATH"
+
+      - name: Install and test formulas
+        if: steps.changed.outputs.has_changes == 'true'
+        run: |
+          INSTALL_FAILED=0
+          for formula in ${{ steps.changed.outputs.formulas }}; do
+            echo "Installing $formula"
+            if ! brew install --verbose "${{ github.repository_owner }}/homebrew-tap/$formula"; then
+              echo "::error::Installation failed for $formula"
+              INSTALL_FAILED=1
+              continue
+            fi
+            echo "Testing $formula"
+            if ! brew test "${{ github.repository_owner }}/homebrew-tap/$formula"; then
+              echo "::warning::Test failed for $formula"
+            fi
+          done
+          if [ "$INSTALL_FAILED" -eq 1 ]; then
+            exit 1
+          fi
+
+      - name: Cleanup
+        if: always()
+        run: |
+          for formula in ${{ steps.changed.outputs.formulas }}; do
+            brew uninstall "${{ github.repository_owner }}/homebrew-tap/$formula" 2>/dev/null || true
+          done
+          TAP_PATH="$(brew --repository)/Library/Taps/${{ github.repository_owner }}/homebrew-tap"
+          rm -rf "$TAP_PATH" || true
