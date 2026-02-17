@@ -3,18 +3,18 @@ name: PR Validation
 on:
   pull_request:
     paths:
-      - "Formula/**"
+      - "Casks/**"
       - ".github/workflows/pr-validation.yml"
 
 permissions: {}
 
 jobs:
   detect-changes:
-    name: Detect Changed Formulas
+    name: Detect Changes
     runs-on: ubuntu-latest
     outputs:
-      formulas: ${{ steps.changed.outputs.formulas }}
-      has_changes: ${{ steps.changed.outputs.has_changes }}
+      casks: ${{ steps.changed.outputs.casks }}
+      has_cask_changes: ${{ steps.changed.outputs.has_cask_changes }}
     permissions:
       contents: read
     steps:
@@ -23,35 +23,36 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Get changed formulas
+      - name: Get changes
         id: changed
         run: |
-          FORMULAS=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- 'Formula/*.rb' | xargs -I{} basename {} .rb)
-          if [ -z "$FORMULAS" ]; then
-            echo "No formula changes detected"
-            echo "has_changes=false" >> $GITHUB_OUTPUT
-            echo "formulas=[]" >> $GITHUB_OUTPUT
+          # Detect changed casks
+          CASKS=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- 'Casks/*.rb' | xargs -I{} basename {} .rb)
+          if [ -z "$CASKS" ]; then
+            echo "No cask changes detected"
+            echo "has_cask_changes=false" >> $GITHUB_OUTPUT
+            echo "casks=[]" >> $GITHUB_OUTPUT
           else
-            JSON_ARRAY=$(echo "$FORMULAS" | jq -R -s -c 'split("\n") | map(select(length > 0))')
-            echo "Changed formulas: $JSON_ARRAY"
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-            echo "formulas=$JSON_ARRAY" >> $GITHUB_OUTPUT
+            JSON_ARRAY=$(echo "$CASKS" | jq -R -s -c 'split("\n") | map(select(length > 0))')
+            echo "Changed casks: $JSON_ARRAY"
+            echo "has_cask_changes=true" >> $GITHUB_OUTPUT
+            echo "casks=$JSON_ARRAY" >> $GITHUB_OUTPUT
           fi
 
-  validate-formula:
-    name: Validate Formula (${{ matrix.formula }})
+  validate-cask:
+    name: Validate Cask (${{ matrix.cask }})
     runs-on: macos-latest
     needs: detect-changes
-    if: needs.detect-changes.outputs.has_changes == 'true'
+    if: needs.detect-changes.outputs.has_cask_changes == 'true'
     permissions:
       contents: read
     strategy:
       fail-fast: false
       matrix:
-        formula: ${{ fromJson(needs.detect-changes.outputs.formulas) }}
+        cask: ${{ fromJson(needs.detect-changes.outputs.casks) }}
     env:
       TAP_PATH: ${{ github.repository_owner }}/homebrew-tap
-      FORMULA_PATH: ${{ github.repository_owner }}/homebrew-tap/${{ matrix.formula }}
+      CASK_PATH: ${{ github.repository_owner }}/homebrew-tap/${{ matrix.cask }}
     steps:
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -64,26 +65,19 @@ jobs:
 
       - name: Run brew style
         run: |
-          brew style --formula "$FORMULA_PATH"
+          brew style --cask "$CASK_PATH"
 
       - name: Run brew audit
         run: |
-          if ! brew audit --formula "$FORMULA_PATH" --new 2>/dev/null; then
-            echo "New formula audit failed, trying regular audit..."
-            brew audit --formula "$FORMULA_PATH"
-          fi
+          brew audit --strict --cask "$CASK_PATH"
 
-      - name: Install formula
+      - name: Install cask
         run: |
-          brew install --verbose "$FORMULA_PATH"
-
-      - name: Test formula
-        run: |
-          brew test "$FORMULA_PATH"
+          brew install --cask --verbose "$CASK_PATH"
 
       - name: Cleanup
         if: always()
         run: |
-          brew uninstall "$FORMULA_PATH" 2>/dev/null || true
+          brew uninstall --cask "$CASK_PATH" 2>/dev/null || true
           ABS_TAP_PATH="$(brew --repository)/Library/Taps/${TAP_PATH}"
           rm -rf "$ABS_TAP_PATH" || true
