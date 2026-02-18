@@ -1,0 +1,36 @@
+name: Validate Cask
+description: Run brew style, audit, install, and cleanup for a cask
+
+inputs:
+  cask-path:
+    description: Full cask path (e.g. owner/homebrew-tap/cask-name)
+    required: true
+  tap-path:
+    description: Tap path (e.g. owner/homebrew-tap)
+    required: true
+  cleanup:
+    description: Whether to uninstall the cask and remove the tap after validation
+    default: "true"
+
+runs:
+  using: composite
+  steps:
+    - name: Run brew style
+      shell: bash
+      run: brew style --cask "${{ inputs.cask-path }}"
+
+    - name: Run brew audit
+      shell: bash
+      run: brew audit --strict --cask "${{ inputs.cask-path }}"
+
+    - name: Install cask
+      shell: bash
+      run: brew install --cask --verbose "${{ inputs.cask-path }}"
+
+    - name: Cleanup
+      if: always() && inputs.cleanup == 'true'
+      shell: bash
+      run: |
+        brew uninstall --cask "${{ inputs.cask-path }}" 2>/dev/null || true
+        ABS_TAP_PATH="$(brew --repository)/Library/Taps/${{ inputs.tap-path }}"
+        rm -rf "$ABS_TAP_PATH" || true
