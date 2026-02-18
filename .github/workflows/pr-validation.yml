@@ -63,21 +63,8 @@ jobs:
           mkdir -p "$ABS_TAP_PATH"
           cp -r . "$ABS_TAP_PATH"
 
-      - name: Run brew style
-        run: |
-          brew style --cask "$CASK_PATH"
-
-      - name: Run brew audit
-        run: |
-          brew audit --strict --cask "$CASK_PATH"
-
-      - name: Install cask
-        run: |
-          brew install --cask --verbose "$CASK_PATH"
-
-      - name: Cleanup
-        if: always()
-        run: |
-          brew uninstall --cask "$CASK_PATH" 2>/dev/null || true
-          ABS_TAP_PATH="$(brew --repository)/Library/Taps/${TAP_PATH}"
-          rm -rf "$ABS_TAP_PATH" || true
+      - name: Validate cask
+        uses: ./.github/actions/validate-cask
+        with:
+          cask-path: ${{ env.CASK_PATH }}
+          tap-path: ${{ env.TAP_PATH }}
