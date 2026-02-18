@@ -64,7 +64,7 @@ jobs:
           cp -r . "$ABS_TAP_PATH"
 
       - name: Validate cask
-        uses: ./.github/actions/validate-cask
+        uses: ./validate-cask
         with:
           cask-path: ${{ env.CASK_PATH }}
           tap-path: ${{ env.TAP_PATH }}
