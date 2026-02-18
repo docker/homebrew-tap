@@ -1,2 +1,3 @@
 .github @desktop/desktop-delivery
-/Casks/secrets-engine.rb @desktop/desktop-delivery
+/Casks/secrets-engine* @desktop/desktop-delivery
+/Casks/sandbox* @desktop/desktop-delivery
