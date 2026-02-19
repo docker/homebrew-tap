@@ -1,6 +1,6 @@
 cask "sandbox" do
   version "0.12.0"
-  sha256 "3a3272d042e7215af294e15f40510545f7ed88a4410a7e7e473a0708ac87c87c"
+  sha256 "18da06c6bf40c783ee5f5230da9428792e9f117b276c07da1fd88031d73bcdcd"
 
   url "https://github.com/docker/sandboxes-releases/releases/download/v#{version}/docker-sandbox-darwin-arm64.gz"
   name "Docker Sandbox CLI"
