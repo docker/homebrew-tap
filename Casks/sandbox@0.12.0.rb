@@ -7,7 +7,7 @@ cask "sandbox@0.12.0" do
   desc "Docker Sandbox CLI"
   homepage "https://github.com/docker/sandboxes-releases"
 
-  depends_on cask: "secrets-engine@0.1.0"
+  depends_on cask: "secrets-engine@0.1.1"
 
   binary "docker-sandbox-darwin-arm64", target: "sandbox"
 
