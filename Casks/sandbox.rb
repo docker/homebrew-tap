@@ -1,5 +1,5 @@
 cask "sandbox" do
-  version "0.12.0"
+  version "0.12.0-test1000"
   sha256 "3a3272d042e7215af294e15f40510545f7ed88a4410a7e7e473a0708ac87c87c"
 
   url "https://github.com/docker/sandboxes-releases/releases/download/v#{version}/docker-sandbox-darwin-arm64.gz"
