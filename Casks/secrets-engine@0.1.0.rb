@@ -9,14 +9,24 @@ cask "secrets-engine@0.1.0" do
 
   app "DockerSecretsEngine.app"
 
+  preflight do
+    app_path = "#{appdir}/DockerSecretsEngine.app"
+    if File.directory?(app_path)
+      system_command "#{app_path}/Contents/MacOS/setup",
+                     args:         ["uninstall"],
+                     must_succeed: false
+      FileUtils.rm_r app_path
+    end
+  end
+
   postflight do
     system_command "#{appdir}/DockerSecretsEngine.app/Contents/MacOS/setup",
                    args: ["install"]
   end
 
   uninstall_preflight do
-    system_command "#{appdir}/DockerSecretsEngine.app/Contents/MacOS/setup",
-                   args: ["uninstall"]
+    setup = "#{appdir}/DockerSecretsEngine.app/Contents/MacOS/setup"
+    system_command setup, args: ["uninstall"] if File.exist?(setup)
   end
 
   zap trash: [
