@@ -1,0 +1,65 @@
+# Secrets and credentials
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+secrets.json
+credentials.json
+service-account*.json
+
+# Database files
+*.sql
+*.db
+*.sqlite
+*.sqlite3
+dump.rdb
+*.backup
+*.bak
+*.dump
+*.dmp
+
+# Binary and executable files
+*.exe
+*.dll
+*.so
+*.dylib
+*.app
+*.deb
+*.rpm
+*.msi
+*.dmg
+*.pkg
+
+# Large binary files that may contain embedded data
+*.jar
+*.war
+*.ear
+
+# Backup and temporary files
+*.old
+*.orig
+*.save
+*.tmp
+
+# Log files
+*.log
+logs/
+
+# OS and IDE files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Dependencies
+node_modules/
+venv/
+env/
+__pycache__/
+.pytest_cache/
