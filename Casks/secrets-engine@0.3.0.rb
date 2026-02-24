@@ -1,4 +1,4 @@
-cask "secrets-engine" do
+cask "secrets-engine@0.3.0" do
   version "0.3.0"
   sha256 "2ad429e2b747ca80c0220881fc85bdad7e220356aafc82511f60087d43078269"
 
