@@ -9,7 +9,7 @@ cask "sandbox@0.12.0" do
 
   depends_on cask: "docker/tap/secrets-engine"
 
-  binary "docker-sandbox-darwin-arm64", target: "sandbox"
+  binary "docker-sandbox-darwin-arm64", target: "sandbox-0.12.0"
 
   # Stop any running daemon before starting again
   # (Would fail on first install since binary is not yet in place)
@@ -24,7 +24,7 @@ cask "sandbox@0.12.0" do
 
   # Ensure clean reboot of the sandbox daemon after installation to align client/server versions
   postflight do
-    binary_path = "#{HOMEBREW_PREFIX}/bin/sandbox"
+    binary_path = "#{HOMEBREW_PREFIX}/bin/sandbox-0.12.0"
     system_command binary_path,
                    args:         ["daemon", "stop"],
                    must_succeed: true
