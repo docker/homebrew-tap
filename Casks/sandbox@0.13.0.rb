@@ -1,4 +1,4 @@
-cask "sandbox" do
+cask "sandbox@0.13.0" do
   version "0.13.0"
   sha256 "1ba18aaf923898702c2bf3f9c83bdb20109361c15289ab0348150d6240c9a8f4"
 
