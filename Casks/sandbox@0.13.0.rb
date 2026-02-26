@@ -2,22 +2,22 @@ cask "sandbox@0.13.0" do
   version "0.13.0"
   sha256 "1ba18aaf923898702c2bf3f9c83bdb20109361c15289ab0348150d6240c9a8f4"
 
-  url "https://github.com/docker/sandboxes-releases/releases/download/v#{version}/docker-sandbox-darwin-arm64.gz"
+  url "https://github.com/docker/sandboxes-releases/releases/download/v#{version}/docker-sandbox-darwin-arm64.tar.gz"
   name "Docker Sandbox CLI"
   desc "Docker Sandbox CLI"
   homepage "https://github.com/docker/sandboxes-releases"
 
   depends_on cask: "docker/tap/secrets-engine"
 
-  binary "docker-sandbox-darwin-arm64", target: "sandbox"
+  binary "bin/sandbox", target: "sandbox"
 
   # Stop any running daemon before starting again
   # (Would fail on first install since binary is not yet in place)
   preflight do
     system_command "/bin/chmod",
-                   args:         ["+x", "#{staged_path}/docker-sandbox-darwin-arm64"],
+                   args:         ["+x", "#{staged_path}/bin/sandbox"],
                    must_succeed: true
-    system_command "#{staged_path}/docker-sandbox-darwin-arm64",
+    system_command "#{staged_path}/bin/sandbox",
                    args:         ["daemon", "stop"],
                    must_succeed: false
   end
