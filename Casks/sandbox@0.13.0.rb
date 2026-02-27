@@ -32,4 +32,9 @@ cask "sandbox@0.13.0" do
                    args:         ["daemon", "start", "-d"],
                    must_succeed: true
   end
+
+  caveats <<~EOS
+    Since a version-specific cask was installed, the binary to use is: sandbox-#{version}
+    Note: Prompt for update will be disabled for version-specific installations.
+  EOS
 end
