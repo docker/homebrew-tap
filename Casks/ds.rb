@@ -1,8 +1,11 @@
+require_relative "../custom_download_strategy"
+
 cask "ds" do
   version "0.13.0"
   sha256 "d7d543ea64aaf15e8bfed812aab0a220c36777d42f6203f604e32d318f8ee99f"
 
-  url "https://github.com/docker/dash-releases/releases/download/v#{version}/ds-darwin-arm64.tar.gz"
+  url "https://github.com/docker/dash-releases/releases/download/v#{version}/ds-darwin-arm64.tar.gz",
+      using: GitHubPrivateRepositoryReleaseDownloadStrategy
   name "Docker Dash CLI"
   desc "Docker Dash CLI"
   homepage "https://github.com/docker/dash-releases"
