@@ -11,6 +11,9 @@ inputs:
   cleanup:
     description: Whether to uninstall the cask and remove the tap after validation
     default: "true"
+  github-token:
+    description: GitHub token for private asset downloads
+    required: false
 
 runs:
   using: composite
@@ -25,7 +28,10 @@ runs:
 
     - name: Install cask
       shell: bash
-      run: brew install --cask --verbose "${{ inputs.cask-path }}"
+      env:
+        HOMEBREW_GH_TOKEN: ${{ inputs.github-token }}
+      run: |
+        brew install --cask --verbose "${{ inputs.cask-path }}"
 
     - name: Cleanup
       if: always() && inputs.cleanup == 'true'
