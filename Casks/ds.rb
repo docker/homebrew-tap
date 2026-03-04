@@ -2,7 +2,7 @@ require_relative "../custom_download_strategy"
 
 cask "ds" do
   version "0.13.0"
-  sha256 "d7d543ea64aaf15e8bfed812aab0a220c36777d42f6203f604e32d318f8ee99f"
+  sha256 "68690e8ad755d22dc2983ca62c5bab47e11166eeb73d75e048645ba1e420d1d7"
 
   url "https://github.com/docker/dash-releases/releases/download/v#{version}/ds-darwin-arm64.tar.gz",
       using: GitHubPrivateRepositoryReleaseDownloadStrategy
@@ -18,16 +18,16 @@ cask "ds" do
   # (Would fail on first install since binary is not yet in place)
   preflight do
     system_command "/bin/chmod",
-                   args:         ["+x", "\#{staged_path}/bin/ds"],
+                   args:         ["+x", "#{staged_path}/bin/ds"],
                    must_succeed: true
-    system_command "\#{staged_path}/bin/ds",
+    system_command "#{staged_path}/bin/ds",
                    args:         ["daemon", "stop"],
                    must_succeed: false
   end
 
   # Ensure clean reboot of the Dash daemon after installation to align client/server versions
   postflight do
-    binary_path = "\#{HOMEBREW_PREFIX}/bin/ds"
+    binary_path = "#{HOMEBREW_PREFIX}/bin/ds"
     system_command binary_path,
                    args:         ["daemon", "stop"],
                    must_succeed: true
