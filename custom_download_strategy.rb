@@ -1,11 +1,12 @@
 require "download_strategy"
+require "json"
 require "shellwords"
 require "utils/curl"
 
 class GitHubPrivateRepositoryReleaseDownloadStrategy < AbstractFileDownloadStrategy
   def initialize(url, name, version, **meta)
     super
-    @github_token = ENV["GH_TOKEN"] || ENV["GITHUB_TOKEN"]
+    @github_token = ENV["HOMEBREW_GH_TOKEN"]
     parse_url_pattern
   end
 
@@ -34,7 +35,7 @@ class GitHubPrivateRepositoryReleaseDownloadStrategy < AbstractFileDownloadStrat
 
         ::Utils::Curl.curl_download asset_url,
                                     "--header",
-                                    "Authorization: Bearer #{@github_token}",
+                                    "Authorization: Token #{@github_token}",
                                     "--header",
                                     "X-GitHub-Api-Version: 2022-11-28",
                                     "--header",
@@ -76,6 +77,12 @@ class GitHubPrivateRepositoryReleaseDownloadStrategy < AbstractFileDownloadStrat
   def fetch_release_metadata
     release_url =
       "https://api.github.com/repos/#{@owner}/#{@repo}/releases/tags/#{@tag}"
-    GitHub::API.open_rest(release_url)
+    curl_output, = ::Utils::Curl.curl_output(
+      release_url,
+      "--header", "Authorization: Token #{@github_token}",
+      "--header", "Accept: application/vnd.github+json",
+      "--header", "X-GitHub-Api-Version: 2022-11-28",
+    )
+    JSON.parse(curl_output)
   end
 end

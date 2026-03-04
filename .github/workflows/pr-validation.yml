@@ -62,9 +62,20 @@ jobs:
           ABS_TAP_PATH="$(brew --repository)/Library/Taps/${TAP_PATH}"
           mkdir -p "$ABS_TAP_PATH"
           cp -r . "$ABS_TAP_PATH"
+      
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@29824e69f54612133e76f7eaac726eef6c875baf # v2.2.1
+        with:
+          app-id: ${{ vars.DOCKER_READ_APP_ID }}
+          private-key: ${{ secrets.DOCKER_READ_APP_PRIVATE_KEY }}
+          owner: docker
+          repositories: |
+            dash-releases
 
       - name: Validate cask
         uses: ./validate-cask
         with:
           cask-path: ${{ env.CASK_PATH }}
           tap-path: ${{ env.TAP_PATH }}
+          github-token: ${{ steps.app-token.outputs.token }}
