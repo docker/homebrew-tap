@@ -10,5 +10,5 @@ brew tap docker/tap
 
 | Cask | Description |
 |------|-------------|
-| `sandbox` | Docker Sandbox CLI |
+| `ds` | Docker Dash CLI |
 | `secrets-engine` | Docker credential management tool |
