@@ -1,4 +1,5 @@
-require_relative "../custom_download_strategy"
+strategy_path = File.expand_path("../custom_download_strategy", __dir__)
+require strategy_path if File.exist?("#{strategy_path}.rb")
 
 cask "ds@0.13.0" do
   version "0.13.0"
