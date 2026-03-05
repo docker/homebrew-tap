@@ -3,12 +3,12 @@ require strategy_path if File.exist?("#{strategy_path}.rb")
 
 cask "ds@0.13.0" do
   version "0.13.0"
-  sha256 "819dec0def59236ce4df23f1e455baac33f4ba30819a72b9e890d93233e86301"
+  sha256 "60847835245aafce7d280df177d3ef2711e1fba396dafc5b190e77b612bc2431"
 
   url "https://github.com/docker/dash-releases/releases/download/v#{version}/Dash.dmg",
       using: GitHubPrivateRepositoryReleaseDownloadStrategy
-  name "Docker Dash CLI"
-  desc "Docker Dash CLI"
+  name "Dash by Docker CLI"
+  desc "Dash by Docker CLI"
   homepage "https://github.com/docker/dash-releases"
 
   depends_on cask: "docker/tap/secrets-engine"
@@ -19,16 +19,16 @@ cask "ds@0.13.0" do
   # (Would fail on first install since binary is not yet in place)
   preflight do
     system_command "/bin/chmod",
-                   args:         ["+x", "#{staged_path}/Dash.app/Contents/MacOS/ds"],
+                   args:         ["+x", "\#{staged_path}/Dash.app/Contents/MacOS/ds"],
                    must_succeed: true
-    system_command "#{staged_path}/Dash.app/Contents/MacOS/ds",
+    system_command "\#{staged_path}/Dash.app/Contents/MacOS/ds",
                    args:         ["daemon", "stop"],
                    must_succeed: false
   end
 
   # Ensure clean reboot of the Dash daemon after installation to align client/server versions
   postflight do
-    binary_path = "#{HOMEBREW_PREFIX}/bin/ds@0.13.0"
+    binary_path = "\#{HOMEBREW_PREFIX}/bin/ds@0.13.0"
     system_command binary_path,
                    args:         ["daemon", "stop"],
                    must_succeed: true
