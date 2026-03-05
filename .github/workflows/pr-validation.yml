@@ -41,7 +41,7 @@ jobs:
 
   validate-cask:
     name: Validate Cask (${{ matrix.cask }})
-    runs-on: macos-latest
+    runs-on: macos-26
     needs: detect-changes
     if: needs.detect-changes.outputs.has_cask_changes == 'true'
     permissions:

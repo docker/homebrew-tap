@@ -3,7 +3,7 @@ require strategy_path if File.exist?("#{strategy_path}.rb")
 
 cask "ds" do
   version "0.13.0"
-  sha256 "819dec0def59236ce4df23f1e455baac33f4ba30819a72b9e890d93233e86301"
+  sha256 "60847835245aafce7d280df177d3ef2711e1fba396dafc5b190e77b612bc2431"
 
   url "https://github.com/docker/dash-releases/releases/download/v#{version}/Dash.dmg",
       using: GitHubPrivateRepositoryReleaseDownloadStrategy
@@ -11,7 +11,9 @@ cask "ds" do
   desc "Docker Dash CLI"
   homepage "https://github.com/docker/dash-releases"
 
-  depends_on cask: "docker/tap/secrets-engine"
+  depends_on cask:  "docker/tap/secrets-engine",
+             arch:  :arm64,
+             macos: ">= :tahoe"
 
   binary "Dash.app/Contents/MacOS/ds", target: "ds"
 
