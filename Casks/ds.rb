@@ -16,26 +16,4 @@ cask "ds" do
              macos: ">= :tahoe"
 
   binary "Dash.app/Contents/MacOS/ds", target: "ds"
-
-  # Stop any running daemon before starting again
-  # (Would fail on first install since binary is not yet in place)
-  preflight do
-    system_command "/bin/chmod",
-                   args:         ["+x", "#{staged_path}/Dash.app/Contents/MacOS/ds"],
-                   must_succeed: true
-    system_command "#{staged_path}/Dash.app/Contents/MacOS/ds",
-                   args:         ["daemon", "stop"],
-                   must_succeed: false
-  end
-
-  # Ensure clean reboot of the Dash daemon after installation to align client/server versions
-  postflight do
-    binary_path = "#{HOMEBREW_PREFIX}/bin/ds"
-    system_command binary_path,
-                   args:         ["daemon", "stop"],
-                   must_succeed: true
-    system_command binary_path,
-                   args:         ["daemon", "start", "-d"],
-                   must_succeed: true
-  end
 end
