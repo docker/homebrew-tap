@@ -47,7 +47,7 @@ class GitHubPrivateRepositoryReleaseDownloadStrategy < AbstractFileDownloadStrat
           "gh --repo=#{@owner}/#{@repo} release download #{@tag} --pattern=#{@filename} --output=#{Shellwords.escape(temporary_path.to_s)} --clobber"
         puts `export PATH=$PATH:/opt/homebrew/bin:/usr/local/bin:~/.local/bin && #{cmd}`
         if not $?.success?
-          raise CurlDownloadStrategyError, "You may need to run 'gh auth login' or 'gh auth refresh' to login to GitHub."
+          raise CurlDownloadStrategyError, "You may need to expose a valid HOMEBREW_GH_TOKEN environment variable:\n\nexport HOMEBREW_GH_TOKEN=$(gh auth token)"
         end
       end
 
