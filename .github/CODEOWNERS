@@ -1,3 +1,1 @@
-.github @docker/desktop-delivery
-Casks/secrets-engine* @docker/desktop-delivery
-Casks/ds* @docker/desktop-delivery
+* @docker/desktop-delivery
