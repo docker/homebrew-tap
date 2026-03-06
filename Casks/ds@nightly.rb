@@ -3,7 +3,7 @@ require strategy_path if File.exist?("#{strategy_path}.rb")
 
 cask "ds@nightly" do
   version "nightly"
-  sha256 "e6f7953f2a702976387af8b6a5c0d5f1e6b29629d04e184d26734251949f19fc"
+  sha256 "568375b1d586e6719b6f2549139caacba4172ff1409bbe58a9341aa5c30b2d26"
 
   url "https://github.com/docker/dash-releases/releases/download/#{version}/Dash.dmg",
       using: GitHubPrivateRepositoryReleaseDownloadStrategy
@@ -15,7 +15,7 @@ cask "ds@nightly" do
              arch:  :arm64,
              macos: ">= :tahoe"
 
-  binary "bin/ds", target: "ds"
+  binary "Dash.app/Contents/MacOS/ds", target: "ds-nightly"
   bash_completion "etc/bash_completion.d/ds"
   zsh_completion "share/zsh/site-functions/_ds"
   fish_completion "share/fish/vendor_completions.d/ds.fish"
