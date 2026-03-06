@@ -11,6 +11,7 @@ cask "ds" do
   desc "Docker Dash CLI"
   homepage "https://github.com/docker/dash-releases"
 
+  conflicts_with cask: "docker/tap/ds@nightly"
   depends_on cask:  "docker/tap/secrets-engine",
              arch:  :arm64,
              macos: ">= :tahoe"
