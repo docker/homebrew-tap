@@ -15,7 +15,7 @@ cask "ds@0.13.0" do
              arch:  :arm64,
              macos: ">= :tahoe"
 
-  binary "Dash.app/Contents/MacOS/ds", target: "ds@0.13.0"
+  binary "Dash.app/Contents/MacOS/ds", target: "ds-0.13.0"
 
   caveats
   <<~EOS
