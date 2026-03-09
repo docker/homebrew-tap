@@ -3,7 +3,7 @@ require strategy_path if File.exist?("#{strategy_path}.rb")
 
 cask "ds" do
   version "0.14.0"
-  sha256 "0cda57098f93abe7003909135afc3ee72187c61df36c1c6903fb9a0f37718ff7"
+  sha256 "0bdb1270de8c9027bcf73fdaac391617e3a76752f7d7ed3e79e1807c42843074"
 
   url "https://github.com/docker/dash-releases/releases/download/v#{version}/Dash.dmg",
       using: GitHubPrivateRepositoryReleaseDownloadStrategy
