@@ -3,7 +3,7 @@ require strategy_path if File.exist?("#{strategy_path}.rb")
 
 cask "ds@0.14.0" do
   version "0.14.0"
-  sha256 "86e373b0305696607a62ce0e0bd5982b6b8d5a24b8b470e8c7ff395ac0c0d19b"
+  sha256 "0cda57098f93abe7003909135afc3ee72187c61df36c1c6903fb9a0f37718ff7"
 
   url "https://github.com/docker/dash-releases/releases/download/v#{version}/Dash.dmg",
       using: GitHubPrivateRepositoryReleaseDownloadStrategy
@@ -16,9 +16,9 @@ cask "ds@0.14.0" do
              macos: ">= :tahoe"
 
   binary "Dash by Docker.app/Contents/MacOS/ds", target: "ds-0.14.0"
-  bash_completion "Dash by Docker.app/Contents/Resources/completions/bash/ds"
-  fish_completion "Dash by Docker.app/Contents/Resources/completions/fish/ds.fish"
-  zsh_completion "Dash by Docker.app/Contents/Resources/completions/zsh/_ds"
+  bash_completion "Dash by Docker.app/Contents/Resources/completions/bash/ds", target: "ds-0.14.0"
+  fish_completion "Dash by Docker.app/Contents/Resources/completions/fish/ds.fish", target: "ds-0.14.0.fish"
+  zsh_completion "Dash by Docker.app/Contents/Resources/completions/zsh/_ds", target: "_ds-0.14.0"
 
   caveats <<~EOS
     Since a version-specific cask was installed, the binary to use is: ds-#{version}
