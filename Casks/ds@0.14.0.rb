@@ -1,7 +1,7 @@
 strategy_path = File.expand_path("../custom_download_strategy", __dir__)
 require strategy_path if File.exist?("#{strategy_path}.rb")
 
-cask "ds" do
+cask "ds@0.14.0" do
   version "0.14.0"
   sha256 "6f7fe2fdf8c0dc099801e4110601d0b73452b91315e80ca4b268dc0607c0ae00"
 
@@ -15,10 +15,14 @@ cask "ds" do
              arch:  :arm64,
              macos: ">= :tahoe"
 
-  conflicts_with cask: "docker/tap/ds@nightly"
-
-  binary "Dash by Docker.app/Contents/MacOS/ds", target: "ds"
+  binary "Dash by Docker.app/Contents/MacOS/ds", target: "ds-0.14.0"
   bash_completion "Dash by Docker.app/Contents/Resources/completions/bash/ds"
   fish_completion "Dash by Docker.app/Contents/Resources/completions/fish/ds.fish"
   zsh_completion "Dash by Docker.app/Contents/Resources/completions/zsh/_ds"
+
+  caveats
+  <<~EOS
+    Since a version-specific cask was installed, the binary to use is: ds-#{version}
+    Note: Prompt for update will be disabled for version-specific installations.
+  EOS
 end
