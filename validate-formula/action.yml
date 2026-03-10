@@ -1,15 +1,15 @@
-name: Validate Cask
-description: Run brew style, audit, install, and cleanup for a cask
+name: Validate Formula
+description: Run brew style, audit, install, and cleanup for a formula
 
 inputs:
-  cask-path:
-    description: Full cask path (e.g. owner/homebrew-tap/cask-name)
+  formula-path:
+    description: Full formula path (e.g. owner/homebrew-tap/formula-name)
     required: true
   tap-path:
     description: Tap path (e.g. owner/homebrew-tap)
     required: true
   cleanup:
-    description: Whether to uninstall the cask and remove the tap after validation
+    description: Whether to uninstall the formula and remove the tap after validation
     default: "true"
   github-token:
     description: GitHub token for private asset downloads
@@ -20,23 +20,23 @@ runs:
   steps:
     - name: Run brew style
       shell: bash
-      run: brew style --cask "${{ inputs.cask-path }}"
+      run: brew style "${{ inputs.formula-path }}"
 
     - name: Run brew audit
       shell: bash
-      run: brew audit --strict --cask "${{ inputs.cask-path }}"
+      run: brew audit --strict "${{ inputs.formula-path }}"
 
-    - name: Install cask
+    - name: Install formula
       shell: bash
       env:
         HOMEBREW_GH_TOKEN: ${{ inputs.github-token }}
       run: |
-        brew install --cask --verbose "${{ inputs.cask-path }}"
+        brew install --verbose "${{ inputs.formula-path }}"
 
     - name: Cleanup
       if: always() && inputs.cleanup == 'true'
       shell: bash
       run: |
-        brew uninstall --cask "${{ inputs.cask-path }}" 2>/dev/null || true
+        brew uninstall "${{ inputs.formula-path }}" 2>/dev/null || true
         ABS_TAP_PATH="$(brew --repository)/Library/Taps/${{ inputs.tap-path }}"
         rm -rf "$ABS_TAP_PATH" || true

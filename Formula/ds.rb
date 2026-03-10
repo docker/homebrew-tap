@@ -1,12 +1,12 @@
 strategy_path = File.expand_path("../custom_download_strategy", __dir__)
 require strategy_path if File.exist?("#{strategy_path}.rb")
 
-class DsNightly < Formula
+class Ds < Formula
   desc "Build, run, and govern agents across the software development lifecycle"
   homepage "https://github.com/docker/dash-releases"
-  url "https://github.com/docker/dash-releases/releases/download/nightly/ds-darwin-arm64.tar.gz",
+  url "https://github.com/docker/dash-releases/releases/download/v0.14.0/ds-darwin-arm64.tar.gz",
     using: GitHubPrivateRepositoryReleaseDownloadStrategy
-  version "nightly-2026031013-fa5c7f9"
+  version "0.14.0"
 
   def install
     bin.install "bin/ds"
@@ -17,6 +17,6 @@ class DsNightly < Formula
   end
 
   test do
-    assert_match "nightly", shell_output("#{bin}/ds version")
+    assert_match "0.14.0", shell_output("#{bin}/ds version")
   end
 end
