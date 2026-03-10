@@ -6,9 +6,8 @@ Official Homebrew tap for [Docker](https://docker.com)
 brew tap docker/tap
 ```
 
-## Casks
+## Formulas
 
-| Cask | Description |
+| Formula | Description |
 |------|-------------|
 | `ds` | Dash by Docker CLI |
-| `secrets-engine` | Docker credential management tool |
