@@ -16,8 +16,8 @@ cask "ds@nightly" do
              arch:  :arm64,
              macos: ">= :tahoe"
 
-  binary "Dash by Docker.app/Contents/MacOS/ds", target: "ds"
-  bash_completion "Dash by Docker.app/Contents/Resources/completions/bash/ds"
-  fish_completion "Dash by Docker.app/Contents/Resources/completions/fish/ds.fish"
-  zsh_completion "Dash by Docker.app/Contents/Resources/completions/zsh/_ds"
+  binary "Dash.app/Contents/MacOS/ds", target: "ds"
+  bash_completion "Dash.app/Contents/Resources/completions/bash/ds"
+  fish_completion "Dash.app/Contents/Resources/completions/fish/ds.fish"
+  zsh_completion "Dash.app/Contents/Resources/completions/zsh/_ds"
 end
