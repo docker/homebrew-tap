@@ -12,8 +12,7 @@ cask "ds@nightly" do
   homepage "https://github.com/docker/dash-releases"
 
   conflicts_with cask: "docker/tap/ds"
-  depends_on cask:  "docker/tap/secrets-engine",
-             arch:  :arm64,
+  depends_on arch:  :arm64,
              macos: ">= :tahoe"
 
   binary "Dash.app/Contents/MacOS/ds", target: "ds"
