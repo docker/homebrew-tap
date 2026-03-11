@@ -1,12 +1,8 @@
-strategy_path = File.expand_path("../custom_download_strategy", __dir__)
-require strategy_path if File.exist?("#{strategy_path}.rb")
-
 cask "ds@0.15.0" do
   version "0.15.0"
   sha256 "b81b0d71df1a69d45c479848f78f447b2acf4e07b2e402cd29b22db3e572b327"
 
-  url "https://github.com/docker/dash-releases/releases/download/v#{version}/Dash.tar.gz",
-      using: GitHubPrivateRepositoryReleaseDownloadStrategy
+  url "https://github.com/docker/dash-releases/releases/download/v#{version}/Dash.tar.gz"
   name "Dash by Docker"
   desc "Build, run, and govern agents across the software development lifecycle"
   homepage "https://github.com/docker/dash-releases"
