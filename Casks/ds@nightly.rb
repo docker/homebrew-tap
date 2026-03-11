@@ -2,7 +2,7 @@ strategy_path = File.expand_path("../custom_download_strategy", __dir__)
 require strategy_path if File.exist?("#{strategy_path}.rb")
 
 cask "ds@nightly" do
-  version "nightly-2026031021-6142890"
+  version "nightly-2026031103-6142890"
   sha256 :no_check
 
   url "https://github.com/docker/dash-releases/releases/download/nightly/Dash.dmg",
