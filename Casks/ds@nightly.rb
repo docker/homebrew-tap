@@ -2,8 +2,8 @@ strategy_path = File.expand_path("../custom_download_strategy", __dir__)
 require strategy_path if File.exist?("#{strategy_path}.rb")
 
 cask "ds@nightly" do
-  version "nightly-202603110940-cb035f9"
-  sha256 "353a56f1e1b6b141c69536696b7705ff4119b17e71d08875288e3aec05e4373f"
+  version "nightly-202603110955-9849857"
+  sha256 "b070495322b5defee79b2a72c2b70cb0d3c4444ec8944459c442aaf23dad6169"
 
   url "https://github.com/docker/dash-releases/releases/download/nightly/Dash.tar.gz",
       using: GitHubPrivateRepositoryReleaseDownloadStrategy
