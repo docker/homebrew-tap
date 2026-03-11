@@ -8,7 +8,7 @@ brew tap docker/tap
 
 ## Casks
 
-| Cask | Description |
-|------|-------------|
+| Cask | Description        |
+| ---- | ------------------ |
 | `ds` | Dash by Docker CLI |
 | `secrets-engine` | Docker credential management tool |
