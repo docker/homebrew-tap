@@ -1,6 +1,6 @@
 cask "ds" do
-  version "0.16.0"
-  sha256 "86eb913f7e3d3bca68ee1be43ccc95c8a39ac3358cba6db31647a4210cf9b4dc"
+  version "0.17.0"
+  sha256 "8bcbc233564f4b9ff5e98ed1a36e122babbe06bbb8b3a4003c97752e21004e9f"
 
   url "https://github.com/docker/dash-releases/releases/download/v#{version}/Dash.tar.gz"
   name "Dash by Docker"
