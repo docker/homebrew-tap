@@ -1,6 +1,6 @@
 cask "ds@nightly" do
-  version "nightly-202603151345-025274f"
-  sha256 "893ae3cfbe2faba3502b0a12bf495304efda81b77cdb35f61d7ae16fb0be7329"
+  version "nightly-202603160400-abb28ea"
+  sha256 "9d2191b7d884bb3359e6f2777ff4e462db840a471d908cb5440ddc8e411450e1"
 
   url "https://github.com/docker/dash-releases/releases/download/nightly/Dash.tar.gz"
   name "Dash by Docker"
