@@ -21,7 +21,7 @@ cask "ds" do
     next unless File.exist?(ds_binary)
 
     system_command ds_binary,
-                  args:         ["daemon", "stop"],
-                  print_stderr: false
+                   args:         ["daemon", "stop"],
+                   print_stderr: false
   end
 end
