@@ -1,6 +1,6 @@
 cask "ds@nightly" do
-  version "nightly-202603160400-abb28ea"
-  sha256 "9d2191b7d884bb3359e6f2777ff4e462db840a471d908cb5440ddc8e411450e1"
+  version "nightly-202603161635-eb05614"
+  sha256 "7168a06433d60977db4b7caf98618e6af77a6241fd81add5848fa484e8055701"
 
   url "https://github.com/docker/dash-releases/releases/download/nightly/Dash.tar.gz"
   name "Dash by Docker"
@@ -15,4 +15,13 @@ cask "ds@nightly" do
   bash_completion "completions/bash/ds"
   fish_completion "completions/fish/ds.fish"
   zsh_completion "completions/zsh/_ds"
+
+  uninstall_preflight do
+    ds_binary = "#{caskroom_path}/#{version}/bin/ds"
+    next unless File.exist?(ds_binary)
+
+    system_command ds_binary,
+                  args:         ["daemon", "stop"],
+                  print_stderr: false
+  end
 end
