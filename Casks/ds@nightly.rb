@@ -1,6 +1,6 @@
 cask "ds@nightly" do
-  version "nightly-202603161635-eb05614"
-  sha256 "7168a06433d60977db4b7caf98618e6af77a6241fd81add5848fa484e8055701"
+  version "nightly-202603170349-5070322"
+  sha256 "322cc23b54cb610c35fa0e559ed77a3369100d0750aae1d5476ec18ad114ea7e"
 
   url "https://github.com/docker/dash-releases/releases/download/nightly/Dash.tar.gz"
   name "Dash by Docker"
@@ -21,7 +21,7 @@ cask "ds@nightly" do
     next unless File.exist?(ds_binary)
 
     system_command ds_binary,
-                  args:         ["daemon", "stop"],
-                  print_stderr: false
+                   args:         ["daemon", "stop"],
+                   print_stderr: false
   end
 end
