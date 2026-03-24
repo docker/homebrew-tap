@@ -10,4 +10,4 @@ brew tap docker/tap
 
 | Cask | Description        |
 | ---- | ------------------ |
-| `ds` | Dash by Docker CLI |
+| `sbx` | Docker Sandboxes |
