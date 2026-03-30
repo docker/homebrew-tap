@@ -1,8 +1,8 @@
 cask "sbx@nightly" do
-  version "nightly-202603300402-e629f15"
-  sha256 "737acdc1bb54ed5639c5f8edcd60ee675d836fda6232ff80747ed576d27c7bbb"
+  version "nightly-202603300814-f116032"
+  sha256 "63fec3f990b366002f1ab4514da9078f53c72fb9af7de597b0671af99c04603b"
 
-  url "https://github.com/docker/sbx-releases/releases/download/nightly/DockerSandboxes.tar.gz"
+  url "https://github.com/docker/sbx-releases/releases/download/nightly/DockerSandboxes-darwin.tar.gz"
   name "Docker Sandboxes"
   desc "Build, run, and govern agents across the software development lifecycle"
   homepage "https://github.com/docker/sbx-releases"
