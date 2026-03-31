@@ -1,11 +1,12 @@
 cask "sbx@nightly" do
-  version "nightly-202603311406-6deaba1"
-  sha256 "2218949cc8661c5e2c90f3871980f24c1dfc4043215352d06e85f1cf2e3bb318"
+  version "nightly-202603311419-31ce5dd"
+  sha256 "4c10ec90bdf4f96171db22f016a40c49179fcb9a459c4b30780aaff2109bab30"
 
   url "https://github.com/docker/sbx-releases/releases/download/nightly/DockerSandboxes-darwin.tar.gz"
   name "Docker Sandboxes"
   desc "Build, run, and govern agents across the software development lifecycle"
   homepage "https://github.com/docker/sbx-releases"
+  license "Proprietary"
 
   conflicts_with cask: "docker/tap/sbx"
   depends_on arch:  :arm64,
