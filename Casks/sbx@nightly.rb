@@ -6,7 +6,6 @@ cask "sbx@nightly" do
   name "Docker Sandboxes"
   desc "Build, run, and govern agents across the software development lifecycle"
   homepage "https://github.com/docker/sbx-releases"
-  license "Proprietary"
 
   conflicts_with cask: "docker/tap/sbx"
   depends_on arch:  :arm64,
