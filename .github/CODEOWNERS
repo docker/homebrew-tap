@@ -1,1 +1,3 @@
 * @docker/desktop-delivery
+
+/Casks @docker/coding-agent-sandboxes @docker/desktop-delivery
