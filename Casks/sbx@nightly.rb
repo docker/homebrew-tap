@@ -1,6 +1,6 @@
 cask "sbx@nightly" do
-  version "nightly-202605030419-df7e89b"
-  sha256 "331fadb969bbbef14d984bd498efca713f8a05af9eecd4297b7c216730bac8a9"
+  version "nightly-202605040419-df7e89b"
+  sha256 "25b3f847d90d00f752232e2061d9160f6bd49fedfb26e3d57f39146a02b8e5ca"
 
   url "https://github.com/docker/sbx-releases/releases/download/nightly/DockerSandboxes-darwin.tar.gz"
   name "Docker Sandboxes"
