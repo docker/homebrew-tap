@@ -1,6 +1,6 @@
 cask "sbx@nightly" do
-  version "nightly-202605280428-c06162c"
-  sha256 "39b62c5cbef0d91956bee3da2e13f6e2585ae9374ec60d6e24faeb3d3b38130c"
+  version "nightly-202605290430-7ea0a2a"
+  sha256 "1d4a60e515486eddc36d577626a6189ff18ed3d73a3005aeed0d663e30cd8aff"
 
   url "https://github.com/docker/sbx-releases/releases/download/nightly/DockerSandboxes-darwin.tar.gz"
   name "Docker Sandboxes"
@@ -9,7 +9,7 @@ cask "sbx@nightly" do
 
   conflicts_with cask: "docker/tap/sbx"
   depends_on arch:  :arm64,
-             macos: ">= :sonoma"
+             macos: :sonoma
 
   binary "bin/sbx", target: "sbx"
   bash_completion "completions/bash/sbx"
