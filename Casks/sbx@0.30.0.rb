@@ -8,7 +8,7 @@ cask "sbx@0.30.0" do
   homepage "https://github.com/docker/sbx-releases"
 
   depends_on arch:  :arm64,
-             macos: ">= :sonoma"
+             macos: :sonoma
 
   binary "bin/sbx", target: "sbx-0.30.0"
   bash_completion "completions/bash/sbx", target: "sbx-0.30.0"
