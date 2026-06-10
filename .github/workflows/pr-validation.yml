@@ -26,8 +26,9 @@ jobs:
       - name: Get changes
         id: changed
         run: |
-          # Detect changed casks
-          CASKS=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- 'Casks/*.rb' | xargs -I{} basename {} .rb)
+          # Detect changed casks (exclude deletions: a removed cask has no
+          # file left to validate, so it must not enter the matrix)
+          CASKS=$(git diff --name-only --diff-filter=d ${{ github.event.pull_request.base.sha }} ${{ github.sha }} -- 'Casks/*.rb' | xargs -I{} basename {} .rb)
           if [ -z "$CASKS" ]; then
             echo "No cask changes detected"
             echo "has_cask_changes=false" >> $GITHUB_OUTPUT
