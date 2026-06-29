@@ -64,6 +64,13 @@ jobs:
           mkdir -p "$ABS_TAP_PATH"
           cp -r . "$ABS_TAP_PATH"
 
+      - name: Trust tap
+        run: |
+          # Homebrew refuses to load casks from non-official taps when tap
+          # trust is required (now enforced by default on the macos-26 runner).
+          # Trust this tap so the validate-cask audit/install steps can load it.
+          brew trust "${{ github.repository_owner }}/tap"
+
       - name: Validate cask
         uses: ./validate-cask
         with:
