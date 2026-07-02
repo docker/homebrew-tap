@@ -39,6 +39,7 @@ jobs:
             echo "has_cask_changes=true" >> $GITHUB_OUTPUT
             echo "casks=$JSON_ARRAY" >> $GITHUB_OUTPUT
           fi
+          
 
   validate-cask:
     name: Validate Cask (${{ matrix.cask }})
