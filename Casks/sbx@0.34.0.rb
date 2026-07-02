@@ -28,4 +28,5 @@ cask "sbx@0.34.0" do
     Since a version-specific cask was installed, the binary to use is: sbx-#{version}
     Note: Prompt for update will be disabled for version-specific installations.
   EOS
+  test
 end
