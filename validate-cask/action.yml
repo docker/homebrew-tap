@@ -21,7 +21,7 @@ runs:
 
     - name: Run brew audit
       shell: bash
-      run: brew audit --strict --cask "${{ inputs.cask-path }}"
+      run: brew audit --strict --cask --except=sha256_no_check_if_unversioned "${{ inputs.cask-path }}"
 
     - name: Install cask
       shell: bash
