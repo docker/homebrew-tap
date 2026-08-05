@@ -1,13 +1,13 @@
 cask "sbx@nightly" do
-  version "nightly-202608040405-de89a8d"
-  sha256 "d3135114182342209aca2f03002848b31027cc18f226ce71553c851e2c3ca2f7"
+  version "nightly-202608050404-ef19074"
+  sha256 "da2f415721f808c633ae61bfd27193922c4f521526ea6347842102fc39f844e8"
 
   url "https://github.com/docker/sbx-releases/releases/download/nightly/DockerSandboxes-darwin.dmg"
   name "Docker Sandboxes"
   desc "Build, run, and govern agents across the software development lifecycle"
   homepage "https://github.com/docker/sbx-releases"
 
-  conflicts_with cask: "docker/tap/sbx"
+  conflicts_with cask: ["docker/tap/sbx", "docker/tap/sbx@rc"]
   depends_on arch:  :arm64,
              macos: :sonoma
 
