@@ -1,6 +1,6 @@
 cask "sbx@rc" do
-  version "0.42.1-rc1"
-  sha256 "bb257cbcb636a6fe11787dd1c935ca07d4232edad4d1e81cdf94ce19da02c880"
+  version "0.43.0-rc3"
+  sha256 "6aac1457a56694dd0c962b21e14d795a6c203ae42bd80b5b7263e1d4de562ecf"
 
   url "https://github.com/docker/sbx-releases/releases/download/v#{version}/DockerSandboxes-darwin.dmg"
   name "Docker Sandboxes"
@@ -16,17 +16,12 @@ cask "sbx@rc" do
   fish_completion "completions/fish/sbx.fish"
   zsh_completion "completions/zsh/_sbx"
 
-  uninstall_preflight_steps do
-    if_path_exists "#{version}/bin/sbx", base: :caskroom_path do
-      symlink ".", ".user-home", source_base: :home, overwrite: true
-      run "/bin/sh",
-          args:           ["-c", 'HOME=$(/usr/bin/readlink "$1"); export HOME; exec "$2" daemon stop',
-                           "sbx-uninstall", "{{staged_path}}/.user-home", "{{staged_path}}/bin/sbx"],
-          print_stderr:   false,
-          writable_paths: ["Library/Application Support/com.docker.sandboxes",
-                           ".sbx/run"],
-          writable_base:  :home,
-          network_access: true
-    end
+  uninstall_preflight do
+    sbx_binary = "#{caskroom_path}/#{version}/bin/sbx"
+    next unless File.exist?(sbx_binary)
+
+    system_command sbx_binary,
+                   args:         ["daemon", "stop"],
+                   print_stderr: false
   end
 end
