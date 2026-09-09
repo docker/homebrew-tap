@@ -1,6 +1,6 @@
 cask "sbx@nightly" do
-  version "nightly-202609080317-82c65bb"
-  sha256 "44bb84b467fd3d85a2e19cdc4ce5b8f92e562d3a466d14c23dbd937943958c0d"
+  version "nightly-202609090317-df5c96b"
+  sha256 "d4e23458dd9cb038d0fe5bc1bf05ff70f1598c4ffd4fa69f6eb41ab108582bf5"
 
   url "https://github.com/docker/sbx-releases/releases/download/#{version}/DockerSandboxes-darwin.dmg"
   name "Docker Sandboxes"
@@ -16,12 +16,17 @@ cask "sbx@nightly" do
   fish_completion "completions/fish/sbx.fish"
   zsh_completion "completions/zsh/_sbx"
 
-  uninstall_preflight do
-    sbx_binary = "#{caskroom_path}/#{version}/bin/sbx"
-    next unless File.exist?(sbx_binary)
-
-    system_command sbx_binary,
-                   args:         ["daemon", "stop"],
-                   print_stderr: false
+  uninstall_preflight_steps do
+    if_path_exists "#{version}/bin/sbx", base: :caskroom_path do
+      symlink ".", ".user-home", source_base: :home, overwrite: true
+      run "/bin/sh",
+          args:           ["-c", 'HOME=$(/usr/bin/readlink "$1"); export HOME; exec "$2" daemon stop',
+                           "sbx-uninstall", "{{staged_path}}/.user-home", "{{staged_path}}/bin/sbx"],
+          print_stderr:   false,
+          writable_paths: ["Library/Application Support/com.docker.sandboxes",
+                           ".sbx/run"],
+          writable_base:  :home,
+          network_access: true
+    end
   end
 end
