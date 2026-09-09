@@ -15,13 +15,18 @@ cask "sbx@0.32.0" do
   fish_completion "completions/fish/sbx.fish", target: "sbx-0.32.0.fish"
   zsh_completion "completions/zsh/_sbx", target: "_sbx-0.32.0"
 
-  uninstall_preflight do
-    sbx_binary = "#{caskroom_path}/#{version}/bin/sbx"
-    next unless File.exist?(sbx_binary)
-
-    system_command sbx_binary,
-                   args:         ["daemon", "stop"],
-                   print_stderr: false
+  uninstall_preflight_steps do
+    if_path_exists "#{version}/bin/sbx", base: :caskroom_path do
+      symlink ".", ".user-home", source_base: :home, overwrite: true
+      run "/bin/sh",
+          args:           ["-c", 'HOME=$(/usr/bin/readlink "$1"); export HOME; exec "$2" daemon stop',
+                           "sbx-uninstall", "{{staged_path}}/.user-home", "{{staged_path}}/bin/sbx"],
+          print_stderr:   false,
+          writable_paths: ["Library/Application Support/com.docker.sandboxes",
+                           ".sbx/run"],
+          writable_base:  :home,
+          network_access: true
+    end
   end
 
   caveats <<~EOS
