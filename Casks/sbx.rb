@@ -28,4 +28,5 @@ cask "sbx" do
           writable_base:  :home,
           network_access: true
     end
+  end
 end

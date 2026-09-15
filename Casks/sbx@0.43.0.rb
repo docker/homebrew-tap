@@ -27,6 +27,7 @@ cask "sbx@0.43.0" do
           writable_base:  :home,
           network_access: true
     end
+  end
 
   caveats <<~EOS
     Since a version-specific cask was installed, the binary to use is: sbx-#{version}
