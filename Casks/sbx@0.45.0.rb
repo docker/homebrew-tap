@@ -1,4 +1,4 @@
-cask "sbx@rc" do
+cask "sbx@0.45.0" do
   version "0.45.0"
   sha256 "76acd4a1dd9fd8e97b02a3ae726a3d56953599ddb8dd37ab7d86fb95245a74a8"
 
@@ -7,14 +7,13 @@ cask "sbx@rc" do
   desc "Build, run, and govern agents across the software development lifecycle"
   homepage "https://github.com/docker/sbx-releases"
 
-  conflicts_with cask: ["docker/tap/sbx", "docker/tap/sbx@nightly"]
   depends_on arch:  :arm64,
              macos: :sonoma
 
-  binary "Sbx.app/Contents/MacOS/sbx", target: "sbx"
-  bash_completion "Sbx.app/Contents/Resources/completions/bash/sbx"
-  fish_completion "Sbx.app/Contents/Resources/completions/fish/sbx.fish"
-  zsh_completion "Sbx.app/Contents/Resources/completions/zsh/_sbx"
+  binary "Sbx.app/Contents/MacOS/sbx", target: "sbx-0.45.0"
+  bash_completion "Sbx.app/Contents/Resources/completions/bash/sbx", target: "sbx-0.45.0"
+  fish_completion "Sbx.app/Contents/Resources/completions/fish/sbx.fish", target: "sbx-0.45.0.fish"
+  zsh_completion "Sbx.app/Contents/Resources/completions/zsh/_sbx", target: "_sbx-0.45.0"
 
   uninstall_preflight_steps do
     if_path_exists "#{version}/Sbx.app/Contents/MacOS/sbx", base: :caskroom_path do
@@ -30,4 +29,9 @@ cask "sbx@rc" do
           network_access: true
     end
   end
+
+  caveats <<~EOS
+    Since a version-specific cask was installed, the binary to use is: sbx-#{version}
+    Note: Prompt for update will be disabled for version-specific installations.
+  EOS
 end
