@@ -13,8 +13,8 @@ cask "sbx@nightly" do
 
   binary "Sbx.app/Contents/MacOS/sbx", target: "sbx"
   bash_completion "Sbx.app/Contents/Resources/completions/bash/sbx"
-  fish_completion "Sbx.app/Contents/Resources/completions/fish/sbx.fish"
   zsh_completion "Sbx.app/Contents/Resources/completions/zsh/_sbx"
+  fish_completion "Sbx.app/Contents/Resources/completions/fish/sbx.fish"
 
   uninstall_preflight_steps do
     if_path_exists "#{version}/Sbx.app/Contents/MacOS/sbx", base: :caskroom_path do
