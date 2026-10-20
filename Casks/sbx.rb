@@ -1,6 +1,6 @@
 cask "sbx" do
-  version "0.48.0"
-  sha256 "e766f43d482067f6d4c803ebd738a438bd9f7020f297922972e41c7102dfac09"
+  version "0.49.1"
+  sha256 "42d50e90d3d6054d4eab20fabc9223e15e2fda15004de6007e5352e77018a219"
 
   url "https://github.com/docker/sbx-releases/releases/download/v#{version}/DockerSandboxes-darwin.dmg"
   name "Docker Sandboxes"
@@ -13,8 +13,8 @@ cask "sbx" do
 
   binary "Sbx.app/Contents/MacOS/sbx", target: "sbx"
   bash_completion "Sbx.app/Contents/Resources/completions/bash/sbx"
-  fish_completion "Sbx.app/Contents/Resources/completions/fish/sbx.fish"
   zsh_completion "Sbx.app/Contents/Resources/completions/zsh/_sbx"
+  fish_completion "Sbx.app/Contents/Resources/completions/fish/sbx.fish"
 
   uninstall_preflight_steps do
     if_path_exists "#{version}/Sbx.app/Contents/MacOS/sbx", base: :caskroom_path do
