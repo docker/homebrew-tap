@@ -1,6 +1,6 @@
 cask "sbx@rc" do
-  version "0.54.0-rc3"
-  sha256 "ed5f8d5446d217bb3e3f7619a1c4ed0f29bd59a7484daab5253f8b024b07534e"
+  version "0.54.0-rc4"
+  sha256 "9b23c6669eb9c45f82d4781ed86338748f5b9f2717b0345f0adee96df4cb36dc"
 
   url "https://github.com/docker/sbx-releases/releases/download/v#{version}/DockerSandboxes-darwin.dmg"
   name "Docker Sandboxes"
